@@ -8,3 +8,7 @@
 .sub-title {
   font-size: 35px;
 }
+
+.home {
+  min-height: 90vh;
+}

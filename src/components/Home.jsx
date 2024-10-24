@@ -28,7 +28,7 @@ const Home = () => {
   };
 
   return (
-    <section className="container">
+    <section className="container home">
       <div className="mt-5">
         <h1 className="title">Welcome to the DevTest</h1>
         <p className="text-center sub-title">
