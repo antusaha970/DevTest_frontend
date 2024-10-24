@@ -1,20 +1,29 @@
 import { useForm } from "react-hook-form";
 import "../css/home.css";
 import client from "../api/client";
+import { useState } from "react";
+import SummaryTable from "./SummaryTable";
 const Home = () => {
   const { register, handleSubmit } = useForm();
+
+  const [summaryData, setSummaryData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("file", data.file[0]);
     try {
+      setIsLoading(true);
       const response = await client.post("/api/process/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response.data);
+      setSummaryData(response.data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -41,8 +50,18 @@ const Home = () => {
             {...register("file")}
           />
         </div>
-        <button className="btn btn-dark mt-2">Submit</button>
+        {!isLoading && (
+          <button className="btn btn-dark mt-2" type="submit">
+            Submit
+          </button>
+        )}
+        {isLoading && (
+          <button className="btn btn-dark mt-2" disabled>
+            Please wait...
+          </button>
+        )}
       </form>
+      {summaryData.length > 0 && <SummaryTable data={summaryData} />}
     </section>
   );
 };
